@@ -38,4 +38,6 @@ const analyzeCircle = (points, tolerance = 0.5) => {
 		center
 	};
 	return result;
-}
+};
+
+modules.export = analyzeCircle;
