@@ -1,0 +1,23 @@
+{
+  "name": "drawn-shape-recognizer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nilestanner/shape-recognizer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nilestanner/shape-recognizer/issues"
+  },
+  "homepage": "https://github.com/nilestanner/shape-recognizer#readme",
+  "devDependencies": {
+    "webpack-cli": "^2.0.10"
+  }
+}
