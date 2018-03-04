@@ -78,4 +78,4 @@ const analyzeLine = (points) => {
 	return result;
 };
 
-modules.export = analyzeLine;
+module.exports = analyzeLine;

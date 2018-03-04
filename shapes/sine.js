@@ -1,7 +1,10 @@
 const common = require('../common.js');
 const analyzeLine = require('./line.js');
 
-const analyzeSine = (points, threshold = 3) => {
+const analyzeSine = (points, threshold) => {
+	if (threshold === undefined) {
+		threshold = 3;
+	}
 	let line = analyzeLine(points);
 	const translatedPoints = points.map((pt) => {
 		return common.rotate(points[0], pt, line.angle);
@@ -9,7 +12,7 @@ const analyzeSine = (points, threshold = 3) => {
 	const lineTestResult = lineTest(translatedPoints);
 	if(!lineTestResult.valid){
 		line.valid = false;
-	} else if (Analyzer.checkPeaks(lineTestResult.criticalPoints, threshold)){
+	} else if (checkPeaks(lineTestResult.criticalPoints, threshold)){
 		//find amplitude
 		const avehigh = lineTestResult.highPts.reduce((a,b) =>{
 			return a + b;

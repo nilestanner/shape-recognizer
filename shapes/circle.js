@@ -1,6 +1,9 @@
 const common = require('../common.js');
 
-const analyzeCircle = (points, tolerance = 0.5) => {
+const analyzeCircle = (points, tolerance) => {
+	if (tolerance === undefined) {
+		tolerance = 0.5;
+	}
 	const xs = points.map(obj => obj.x);
 	const maxx = Math.max.apply(null,xs);
 	const minx = Math.min.apply(null,xs);
@@ -21,7 +24,7 @@ const analyzeCircle = (points, tolerance = 0.5) => {
 	let maxd = {d:0};
 	let mind = {d:Infinity};
 	points.forEach((pt) => {
-		totalDist += Math.pow(Math.abs((pt.d - avedist) / avedist), tolerance);
+		totalDist += Math.pow(Math.abs((pt.d - averageDistance) / averageDistance), tolerance);
 		if(pt.d > maxd.d){
 			maxd = pt;
 		}
@@ -34,10 +37,10 @@ const analyzeCircle = (points, tolerance = 0.5) => {
 		accuracy:1 - totalDist,
 		lowWeakPoint: mind,
 		highWeakPoint: maxd,
-		radius:avedist,
+		radius:averageDistance,
 		center
 	};
 	return result;
 };
 
-modules.export = analyzeCircle;
+module.exports = analyzeCircle;
