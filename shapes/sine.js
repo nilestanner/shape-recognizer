@@ -1,5 +1,5 @@
 const common = require('../common.js');
-const analyzeLine = require('line.js');
+const analyzeLine = require('./line.js');
 
 const analyzeSine = (points, threshold = 3) => {
 	let line = analyzeLine(points);
