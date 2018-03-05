@@ -6,19 +6,21 @@ const analyzeSine = (points, threshold) => {
 		threshold = 3;
 	}
 	let line = analyzeLine(points);
+	delete line.accuracy;
 	const translatedPoints = points.map((pt) => {
 		return common.rotate(points[0], pt, line.angle);
 	});
 	const lineTestResult = lineTest(translatedPoints);
+	console.log(lineTestResult);
 	if(!lineTestResult.valid){
 		line.valid = false;
 	} else if (checkPeaks(lineTestResult.criticalPoints, threshold)){
 		//find amplitude
 		const avehigh = lineTestResult.highPts.reduce((a,b) =>{
-			return a + b;
+			return a + b.y;
 		},0) / lineTestResult.highPts.length;
 		const avelow = lineTestResult.lowPts.reduce((a,b) =>{
-			return a + b;
+			return a + b.y;
 		},0) / lineTestResult.lowPts.length;
 		line.amplitude = Math.abs(avehigh - avelow) / 2;
 		//find period
@@ -106,7 +108,7 @@ const checkPeaks = (points, threshold) => {
 		if(point.type !== prevType && prevType !== null){
 			peakCount++;
 		}
-		prevType = pt.type;
+		prevType = point.type;
 	});
 	return peakCount >= threshold;
 };

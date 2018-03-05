@@ -7,19 +7,12 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.5/paper-full.min.js"></script>
     <script type="text/javascript" src="../dist/bundle.js"></script>
     <script type="text/paperscript" src="main.js" canvas="canvas"></script>
-
 </head>
-<body>
-  <script>
-  var currentTesting = 'circle';
+  <body>
 
-  var testing = function(value){
-    currentTesting = value;
-  }
-  </script>
-  <button onclick="testing('sine')">sine</button>
-  <button onclick="testing('circle')">circle</button>
-  <button onclick="testing('line')">line</button>
+    <button id="sineBtn">sine</button>
+    <button id="circleBtn">circle</button>
+    <button id="lineBtn">line</button>
     <canvas id="canvas" resize></canvas>
-</body>
+  </body>
 </html>

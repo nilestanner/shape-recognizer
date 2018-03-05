@@ -3,19 +3,22 @@ const distance = (point1, point2) => {
 };
 
 const isVertical = (points) => {
+	if (!points.length) {
+		return;
+	}
 	return Math.abs(points[0].x - points[points.length - 1].x) <  Math.abs(points[0].y - points[points.length - 1].y);
 };
 
 const rotate = (pivotPoint, point, angle) => {
-		const cos = Math.cos(angle);
-		const sin = Math.sin(angle);
-		var newX = Math.round((cos * (point.x - pivotPoint.x)) + (sin * (point.y - pivotPoint.y)) + pivotPoint.x);
-		var newY = Math.round((cos * (point.y - pivotPoint.y)) - (sin * (point.x - pivotPoint.x)) + pivotPoint.y);
-		return {
-			x:newX,
-			y:newY
-		};
+	const cos = Math.cos(angle);
+	const sin = Math.sin(angle);
+	var newX = Math.round((cos * (point.x - pivotPoint.x)) + (sin * (point.y - pivotPoint.y)) + pivotPoint.x);
+	var newY = Math.round((cos * (point.y - pivotPoint.y)) - (sin * (point.x - pivotPoint.x)) + pivotPoint.y);
+	return {
+		x:newX,
+		y:newY
 	};
+};
 
 module.exports = {
   distance,
