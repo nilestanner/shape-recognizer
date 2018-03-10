@@ -7,7 +7,7 @@ var textItem = new PointText({
 });
 
 document.getElementById("circleBtn").addEventListener('click', function () {
-  switchShape('cirle');
+  switchShape('circle');
 });
 document.getElementById("sineBtn").addEventListener('click', function () {
   switchShape('sine');
@@ -41,14 +41,9 @@ function onMouseDrag(event) {
 }
 
 function onMouseUp(event) {
-    var segmentCount = path.segments.length;
-    path.fullySelected = true;
-    var newSegmentCount = path.segments.length;
-    var difference = segmentCount - newSegmentCount;
     switch(currentTesting){
       case 'circle':
         showCircleResults(analyzer.analyzeCircle(allPoints));
-
         break;
       case 'sine':
         showSineResults(analyzer.analyzeSine(allPoints));
@@ -91,7 +86,6 @@ function showCircleResults (circle) {
 }
 
 function showLineResults (line) {
-  console.log(line);
   createx(line.firstPoint,'green');
   createx(line.lastPoint,'green');
   drawLine(line.firstPoint, line.lastPoint, 'green');
@@ -103,7 +97,6 @@ function showLineResults (line) {
 }
 
 function showSineResults (sine){
-  console.log(sine);
   createx(sine.firstPoint,'green');
   createx(sine.lastPoint,'green');
   drawLine(sine.firstPoint, sine.lastPoint, 'green');
@@ -112,10 +105,6 @@ function showSineResults (sine){
       point: new Point(sine.lastPoint.x + 5, sine.lastPoint.y),
       fillColor: 'black',
   });
-  // drawLine(sine.firstPoint, rotate(sine.firstPoint, {
-  //   x: sine.firstPoint.x,
-  //   y: sine.firstPoint.y + sine.amplitude
-  // }, sine.angle + Math.PI), 'blue');
 }
 
 function createx(point, color){
