@@ -1,6 +1,6 @@
 {
   "name": "drawn-shape-recognizer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,5 +18,12 @@
   "homepage": "https://github.com/nilestanner/shape-recognizer#readme",
   "devDependencies": {
     "webpack-cli": "^2.0.10"
-  }
+  },
+  "keyords": [
+    "drawing",
+    "shape",
+    "algorithm",
+    "recognition",
+    "path"
+  ]
 }
