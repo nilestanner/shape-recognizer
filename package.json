@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/nilestanner/shape-recognizer#readme",
   "devDependencies": {
-    "webpack-cli": "^2.0.10"
+    "webpack-cli": "^3.3.2"
   },
   "keyords": [
     "drawing",
