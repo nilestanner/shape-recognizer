@@ -5,11 +5,13 @@ const analyzeCircle = (points, tolerance) => {
 		tolerance = 0.5;
 	}
 	const xs = points.map(obj => obj.x);
-	const maxx = Math.max.apply(null,xs);
-	const minx = Math.min.apply(null,xs);
+	// SECURITY: Use reduce instead of Math.max/min.apply to prevent
+	// Call Stack Overflow (DoS) with large user-supplied input arrays.
+	const maxx = xs.reduce((max, val) => val > max ? val : max, -Infinity);
+	const minx = xs.reduce((min, val) => val < min ? val : min, Infinity);
 	const ys = points.map(obj => obj.y);
-	const maxy = Math.max.apply(null,ys);
-	const miny = Math.min.apply(null,ys);
+	const maxy = ys.reduce((max, val) => val > max ? val : max, -Infinity);
+	const miny = ys.reduce((min, val) => val < min ? val : min, Infinity);
   const center = {
     x:(maxx + minx)/2,
     y:(maxy + miny)/2

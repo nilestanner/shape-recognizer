@@ -66,4 +66,11 @@ describe('shapes/circle', () => {
     assert.strictEqual(result.radius, 5);
     assert.strictEqual(result.accuracy, 1);
   });
+
+  it('should handle large arrays without maximum call stack size exceeded (DoS fix)', () => {
+    const points = Array(200000).fill({x: 0, y: 0});
+    assert.doesNotThrow(() => {
+      analyzeCircle(points);
+    });
+  });
 });
