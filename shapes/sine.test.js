@@ -55,12 +55,16 @@ describe('shapes/sine', () => {
     assert.strictEqual(analyzeSine(wave(0.5)).valid, false);
   });
 
-  // BUG (not fixed in this PR): in lineTest's right-to-left branch the code uses `cur`
-  // instead of `current`, so drawing a wave from right to left throws a ReferenceError.
+  // Regression: lineTest's right-to-left branch used `cur` instead of `current` (ReferenceError).
   it('recognizes a wave drawn right-to-left',
-    { todo: 'shapes/sine.js lineTest references undefined `cur` in the right-to-left branch' },
     () => {
       const result = analyzeSine(wave().reverse());
       assert.strictEqual(result.valid, true);
     });
+
+  it('rejects a flat line drawn right-to-left without throwing', () => {
+    const flat = [];
+    for (let i = 20; i >= 0; i--) flat.push({ x: i * 5, y: 10 });
+    assert.strictEqual(analyzeSine(flat).valid, false);
+  });
 });
