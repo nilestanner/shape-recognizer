@@ -5,11 +5,11 @@ const analyzeCircle = (points, tolerance) => {
 		tolerance = 0.5;
 	}
 	const xs = points.map(obj => obj.x);
-	const maxx = Math.max.apply(null,xs);
-	const minx = Math.min.apply(null,xs);
+	const maxx = xs.reduce((a, b) => Math.max(a, b), -Infinity);
+	const minx = xs.reduce((a, b) => Math.min(a, b), Infinity);
 	const ys = points.map(obj => obj.y);
-	const maxy = Math.max.apply(null,ys);
-	const miny = Math.min.apply(null,ys);
+	const maxy = ys.reduce((a, b) => Math.max(a, b), -Infinity);
+	const miny = ys.reduce((a, b) => Math.min(a, b), Infinity);
   const center = {
     x:(maxx + minx)/2,
     y:(maxy + miny)/2
