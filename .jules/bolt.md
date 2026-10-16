@@ -1,0 +1,3 @@
+## 2026-10-16 - Math.max.apply on Large Arrays
+**Learning:** Found multiple instances of `Math.max.apply(null, points)` and multiple chainable array operations (`map`, `forEach`, `reduce`) used to process shape tracking data points. `Math.max.apply` crashes with `Maximum call stack size exceeded` for large coordinate arrays, and chaining introduces massive memory overhead and garbage collection pauses.
+**Action:** Replaced array chains and variadic `Math.max` calls with fast, single-pass `for` loops in hot path routines (`shapes/circle.js`). Ensure array iteration refactors always replace implicit max/min patterns to prevent crashes.
