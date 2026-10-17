@@ -15,4 +15,13 @@ describe('index', () => {
     assert.strictEqual(analyzer.analyzeLine, require('./shapes/line.js'));
     assert.strictEqual(analyzer.analyzeSine, require('./shapes/sine.js'));
   });
+
+  it('sets analyzer on window if window is defined', () => {
+    global.window = {};
+    delete require.cache[require.resolve('./index.js')];
+    require('./index.js');
+    assert.ok(global.window.analyzer);
+    assert.strictEqual(typeof global.window.analyzer.analyzeCircle, 'function');
+    delete global.window;
+  });
 });

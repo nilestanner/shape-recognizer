@@ -63,4 +63,13 @@ describe('shapes/sine', () => {
       const result = analyzeSine(wave().reverse());
       assert.strictEqual(result.valid, true);
     });
+
+  it('throws an error for an empty array of points', () => {
+    assert.throws(() => analyzeSine([]), TypeError);
+  });
+
+  it('handles a single-point array safely returning invalid', () => {
+    const result = analyzeSine([{ x: 1, y: 1 }]);
+    assert.strictEqual(result.valid, false);
+  });
 });
