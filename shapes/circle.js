@@ -4,34 +4,46 @@ const analyzeCircle = (points, tolerance) => {
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}
-	const xs = points.map(obj => obj.x);
-	const maxx = Math.max.apply(null,xs);
-	const minx = Math.min.apply(null,xs);
-	const ys = points.map(obj => obj.y);
-	const maxy = Math.max.apply(null,ys);
-	const miny = Math.min.apply(null,ys);
-  const center = {
-    x:(maxx + minx)/2,
-    y:(maxy + miny)/2
-  };
-	const distances = points.map((obj) => {
-		obj.d = common.distance(obj, center);
-		return obj.d;
-	});
-	const averageDistance = distances.reduce((a,b) => a + b, 0) / points.length;
+	let maxx = -Infinity;
+	let minx = Infinity;
+	let maxy = -Infinity;
+	let miny = Infinity;
+
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
+		if (pt.x > maxx) maxx = pt.x;
+		if (pt.x < minx) minx = pt.x;
+		if (pt.y > maxy) maxy = pt.y;
+		if (pt.y < miny) miny = pt.y;
+	}
+
+	const center = {
+		x: (maxx + minx) / 2,
+		y: (maxy + miny) / 2
+	};
+
+	let sumDistance = 0;
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
+		pt.d = common.distance(pt, center);
+		sumDistance += pt.d;
+	}
+	const averageDistance = sumDistance / points.length;
 
 	let totalDist = 0;
-	let maxd = {d:0};
-	let mind = {d:Infinity};
-	points.forEach((pt) => {
+	let maxd = { d: 0 };
+	let mind = { d: Infinity };
+
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
 		totalDist += Math.pow(Math.abs((pt.d - averageDistance) / averageDistance), tolerance);
-		if(pt.d > maxd.d){
+		if (pt.d > maxd.d) {
 			maxd = pt;
 		}
-		if(pt.d < mind.d){
+		if (pt.d < mind.d) {
 			mind = pt;
 		}
-	});
+	}
 	totalDist = totalDist / points.length;
 	var result = {
 		accuracy:1 - totalDist,
