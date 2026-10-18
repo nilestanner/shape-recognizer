@@ -66,4 +66,21 @@ describe('shapes/circle', () => {
     assert.strictEqual(result.radius, 5);
     assert.strictEqual(result.accuracy, 1);
   });
+
+  it('handles an empty array of points', () => {
+    const result = analyzeCircle([]);
+    assert.ok(Number.isNaN(result.accuracy));
+    assert.ok(Number.isNaN(result.radius));
+    assert.ok(Number.isNaN(result.center.x));
+    assert.ok(Number.isNaN(result.center.y));
+  });
+
+  it('handles a single-point array', () => {
+    const result = analyzeCircle([{ x: 10, y: 10 }]);
+    assert.ok(Number.isNaN(result.accuracy));
+    assert.strictEqual(result.radius, 0);
+    assert.deepStrictEqual(result.center, { x: 10, y: 10 });
+    assert.deepStrictEqual(result.lowWeakPoint, { x: 10, y: 10, d: 0 });
+    assert.deepStrictEqual(result.highWeakPoint, { d: 0 });
+  });
 });
