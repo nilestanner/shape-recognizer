@@ -13,6 +13,16 @@ describe('shapes/line', () => {
     assert.deepStrictEqual(result, [[], []]);
   });
 
+  it('should handle a single-point array', () => {
+    const result = analyzeLine([{ x: 1, y: 1 }]);
+    assert.ok(Number.isNaN(result.accuracy));
+    assert.ok(Number.isNaN(result.firstPoint.y));
+    assert.ok(Number.isNaN(result.lastPoint.y));
+    assert.ok(Number.isNaN(result.angle));
+    assert.ok(Number.isNaN(result.length));
+    assert.strictEqual(result.fullLength, 0);
+  });
+
   it('should correctly analyze a horizontal line', () => {
     const points = [
       { x: 0, y: 0 },
