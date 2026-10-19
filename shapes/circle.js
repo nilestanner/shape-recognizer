@@ -8,6 +8,10 @@ const analyzeCircle = (points, tolerance) => {
 	// Avoids O(n) array allocations and Maximum Call Stack Size Exceeded errors on large point arrays
 	let maxx = -Infinity, minx = Infinity;
 	let maxy = -Infinity, miny = Infinity;
+
+	// Optimization: Single pass loop for bounding box limits instead of multiple
+	// .map() operations and Math.max.apply / Math.min.apply which allocate intermediate
+	// arrays and can exceed max call stack size limits on large array sizes.
 	for (let i = 0; i < points.length; i++) {
 		const x = points[i].x;
 		const y = points[i].y;
@@ -21,6 +25,8 @@ const analyzeCircle = (points, tolerance) => {
     y: (maxy + miny) / 2
   };
 
+	// Optimization: Single pass to calculate all distances instead of
+	// .map() followed by .reduce() which allocated an intermediate distance array.
 	let totalDistanceSum = 0;
 	for (let i = 0; i < points.length; i++) {
 		const pt = points[i];
