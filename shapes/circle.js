@@ -4,16 +4,16 @@ const analyzeCircle = (points, tolerance) => {
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}
-
-	let maxx = -Infinity, minx = Infinity, maxy = -Infinity, miny = Infinity;
+	let maxx = -Infinity, minx = Infinity;
+	let maxy = -Infinity, miny = Infinity;
 	for (let i = 0; i < points.length; i++) {
-		const pt = points[i];
-		if (pt.x > maxx) maxx = pt.x;
-		if (pt.x < minx) minx = pt.x;
-		if (pt.y > maxy) maxy = pt.y;
-		if (pt.y < miny) miny = pt.y;
+		const x = points[i].x;
+		const y = points[i].y;
+		if (x > maxx) maxx = x;
+		if (x < minx) minx = x;
+		if (y > maxy) maxy = y;
+		if (y < miny) miny = y;
 	}
-
   const center = {
     x:(maxx + minx)/2,
     y:(maxy + miny)/2
