@@ -4,6 +4,7 @@ const analyzeCircle = (points, tolerance) => {
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}
+	// SECURITY: Use loop iteration to prevent Call Stack Overflow (DoS) with large user-supplied input arrays.
 	// ⚡ Bolt Optimization: Replace multiple .map, .reduce, and Math.max.apply with single passes
 	// Avoids O(n) array allocations and Maximum Call Stack Size Exceeded errors on large point arrays
 	let maxx = -Infinity, minx = Infinity;
