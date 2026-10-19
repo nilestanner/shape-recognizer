@@ -4,22 +4,20 @@ const analyzeCircle = (points, tolerance) => {
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}
-	let maxx = -Infinity;
-	let minx = Infinity;
-	let maxy = -Infinity;
-	let miny = Infinity;
+	let maxx = -Infinity, minx = Infinity;
+	let maxy = -Infinity, miny = Infinity;
 
 	// Optimization: Single pass loop for bounding box limits instead of multiple
 	// .map() operations and Math.max.apply / Math.min.apply which allocate intermediate
 	// arrays and can exceed max call stack size limits on large array sizes.
 	for (let i = 0; i < points.length; i++) {
-		const pt = points[i];
-		if (pt.x > maxx) maxx = pt.x;
-		if (pt.x < minx) minx = pt.x;
-		if (pt.y > maxy) maxy = pt.y;
-		if (pt.y < miny) miny = pt.y;
+		const x = points[i].x;
+		const y = points[i].y;
+		if (x > maxx) maxx = x;
+		if (x < minx) minx = x;
+		if (y > maxy) maxy = y;
+		if (y < miny) miny = y;
 	}
-
   const center = {
     x:(maxx + minx)/2,
     y:(maxy + miny)/2
