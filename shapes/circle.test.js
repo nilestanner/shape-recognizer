@@ -83,4 +83,11 @@ describe('shapes/circle', () => {
     assert.deepStrictEqual(result.lowWeakPoint, { x: 10, y: 10, d: 0 });
     assert.deepStrictEqual(result.highWeakPoint, { d: 0 });
   });
+
+  it('can handle a very large array of points without stack overflow', { todo: 'shapes/circle.js analyzeCircle throws Maximum call stack size exceeded due to Math.max.apply on large arrays' }, () => {
+    const largeArray = Array.from({ length: 200000 }, (_, i) => ({ x: i, y: i }));
+    const result = analyzeCircle(largeArray);
+    assert.ok(result);
+    assert.ok(typeof result.accuracy === 'number');
+  });
 });
