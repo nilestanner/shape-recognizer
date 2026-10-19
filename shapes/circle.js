@@ -7,6 +7,10 @@ const analyzeCircle = (points, tolerance) => {
 	// SECURITY: Use loop iteration to prevent Call Stack Overflow (DoS) with large user-supplied input arrays.
 	let maxx = -Infinity, minx = Infinity;
 	let maxy = -Infinity, miny = Infinity;
+
+	// Optimization: Single pass loop for bounding box limits instead of multiple
+	// .map() operations and Math.max.apply / Math.min.apply which allocate intermediate
+	// arrays and can exceed max call stack size limits on large array sizes.
 	for (let i = 0; i < points.length; i++) {
 		const x = points[i].x;
 		const y = points[i].y;
@@ -19,11 +23,16 @@ const analyzeCircle = (points, tolerance) => {
     x:(maxx + minx)/2,
     y:(maxy + miny)/2
   };
-	const distances = points.map((obj) => {
-		obj.d = common.distance(obj, center);
-		return obj.d;
-	});
-	const averageDistance = distances.reduce((a,b) => a + b, 0) / points.length;
+
+	// Optimization: Single pass to calculate all distances instead of
+	// .map() followed by .reduce() which allocated an intermediate distance array.
+	let totalDistance = 0;
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
+		pt.d = common.distance(pt, center);
+		totalDistance += pt.d;
+	}
+	const averageDistance = totalDistance / points.length;
 
 	let totalDist = 0;
 	let maxd = {d:0};
