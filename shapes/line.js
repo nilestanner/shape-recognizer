@@ -11,9 +11,6 @@ const analyzeLine = (points) => {
       };
 		});
 	}
-	const valuesX = correctedPoints.map(obj => obj.x);
-	const valuesY = correctedPoints.map(obj => obj.y);
-
 	let sumX = 0;
 	let sumY = 0;
 	let sumXY = 0;
@@ -21,13 +18,13 @@ const analyzeLine = (points) => {
 	let count = 0;
 	let x = 0;
 	let y = 0;
-	let valuesLength = valuesX.length;
-	if (valuesLength === 0) {
+	let pointsLength = correctedPoints.length;
+	if (pointsLength === 0) {
 		return [ [], [] ];
 	}
-	for (let v = 0; v < valuesLength; v++) {
-		x = valuesX[v];
-		y = valuesY[v];
+	for (let v = 0; v < pointsLength; v++) {
+		x = correctedPoints[v].x;
+		y = correctedPoints[v].y;
 		sumX += x;
 		sumY += y;
 		sumXX += x*x;
@@ -46,12 +43,12 @@ const analyzeLine = (points) => {
 		prev = pt;
 	});
 	const firstPoint = {
-		x: valuesX[0],
-		y: valuesX[0] * m + b
+		x: correctedPoints[0].x,
+		y: correctedPoints[0].x * m + b
 	};
 	const lastpoint = {
-		x: valuesX[valuesX.length - 1],
-		y: valuesX[valuesX.length - 1] * m + b
+		x: correctedPoints[pointsLength - 1].x,
+		y: correctedPoints[pointsLength - 1].x * m + b
 	};
 	const fixedLength = common.distance(firstPoint,lastpoint);
 	totalDist =  fixedLength / allDistance ;
