@@ -6,16 +6,15 @@ const analyzeCircle = (points, tolerance) => {
 	}
 	// Bolt optimization: replaced map + Math.max.apply to avoid
 	// stack overflow on large arrays and improve bounding box calculation speed.
-	let maxx = -Infinity;
-	let minx = Infinity;
-	let maxy = -Infinity;
-	let miny = Infinity;
+	let maxx = -Infinity, minx = Infinity;
+	let maxy = -Infinity, miny = Infinity;
 	for (let i = 0; i < points.length; i++) {
-		const pt = points[i];
-		if (pt.x > maxx) maxx = pt.x;
-		if (pt.x < minx) minx = pt.x;
-		if (pt.y > maxy) maxy = pt.y;
-		if (pt.y < miny) miny = pt.y;
+		const x = points[i].x;
+		const y = points[i].y;
+		if (x > maxx) maxx = x;
+		if (x < minx) minx = x;
+		if (y > maxy) maxy = y;
+		if (y < miny) miny = y;
 	}
   const center = {
     x:(maxx + minx)/2,
