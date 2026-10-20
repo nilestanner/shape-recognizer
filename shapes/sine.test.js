@@ -72,7 +72,7 @@ describe('shapes/sine', () => {
     assert.strictEqual(result.valid, false);
   });
 
-  it('should handle right-to-left drawn sine wave', { todo: 'throws ReferenceError: cur is not defined on line 65' }, () => {
+  it('should handle right-to-left drawn sine wave', () => {
     const points = [];
     for (let i = 20; i >= 0; i--) {
       points.push({ x: i, y: Math.sin(i) * 10 });
@@ -115,7 +115,7 @@ describe('shapes/sine', () => {
     assert.strictEqual(typeof result.angle, 'number');
   });
 
-  it('should fail on sine wave drawn right-to-left due to "cur" reference bug', { todo: 'sine.js references "cur" instead of "current" when drawing right-to-left' }, () => {
+  it('recognizes a wave drawn right-to-left across multiple periods', () => {
     const points = [];
     for (let i = 60; i >= 0; i--) {
       points.push({
@@ -128,10 +128,7 @@ describe('shapes/sine', () => {
     assert.strictEqual(result.valid, true);
   });
 
-  // BUG (not fixed in this PR): in lineTest's right-to-left branch the code uses `cur`
-  // instead of `current`, so drawing a wave from right to left throws a ReferenceError.
   it('recognizes a wave drawn right-to-left',
-    { todo: 'shapes/sine.js lineTest references undefined `cur` in the right-to-left branch' },
     () => {
       const result = analyzeSine(wave().reverse());
       assert.strictEqual(result.valid, true);
@@ -209,6 +206,12 @@ describe('shapes/sine', () => {
     // Might still pass or fail depending on how average is computed,
     // let's ensure we just test the code paths.
     assert.strictEqual(typeof result.valid, 'boolean');
+  });
+
+  it('rejects a flat line drawn right-to-left without throwing', () => {
+    const flat = [];
+    for (let i = 20; i >= 0; i--) flat.push({ x: i * 5, y: 10 });
+    assert.strictEqual(analyzeSine(flat).valid, false);
   });
 
   it('throws an error for an empty array of points', () => {

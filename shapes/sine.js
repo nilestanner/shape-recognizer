@@ -61,11 +61,11 @@ const lineTest = (points) => {
 			if(prev.x === 0){
 				result = true;
 			}
-			if(direction === 'up' && cur.y < prev.y ){
+			if(direction === 'up' && current.y < prev.y ){
 				direction = 'down';
 				current.type='high';
 				highpts.push(current);
-			} else if(direction === 'down' && cur.y > prev.y){
+			} else if(direction === 'down' && current.y > prev.y){
 				direction = 'up';
 				current.type='low';
 				lowpts.push(current);
