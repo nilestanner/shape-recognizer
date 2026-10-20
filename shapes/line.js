@@ -2,53 +2,52 @@ const common = require('../common.js');
 
 const analyzeLine = (points) => {
 	const vertical = common.isVertical(points);
-	let correctedPoints = points;
-	if(vertical){
-		correctedPoints = points.map((pt) => {
-			return {
-        x: pt.y,
-        y: pt.x
-      };
-		});
-	}
 	let sumX = 0;
 	let sumY = 0;
 	let sumXY = 0;
 	let sumXX = 0;
 	let count = 0;
-	let x = 0;
-	let y = 0;
-	let pointsLength = correctedPoints.length;
+	let pointsLength = points.length;
 	if (pointsLength === 0) {
 		return [ [], [] ];
 	}
+
+	let allDistance = 0;
+
+	// ⚡ Bolt Optimization: Single pass loop replacing multiple .map() and .forEach()
+	// Eliminates O(N) allocation of correctedPoints array, combining sums and distances
 	for (let v = 0; v < pointsLength; v++) {
-		x = correctedPoints[v].x;
-		y = correctedPoints[v].y;
+		const pt = points[v];
+		const x = vertical ? pt.y : pt.x;
+		const y = vertical ? pt.x : pt.y;
+
 		sumX += x;
 		sumY += y;
-		sumXX += x*x;
-		sumXY += x*y;
+		sumXX += x * x;
+		sumXY += x * y;
 		count++;
-	}
-	const m = (count*sumXY - sumX*sumY) / (count*sumXX - sumX*sumX);
-	const b = (sumY/count) - (m*sumX)/count;
-	let totalDist = 0;
-	let prev = null;
-	let allDistance = 0;
-	correctedPoints.forEach((pt) => {
-		if(prev){
-			allDistance += common.distance(pt,prev);
+
+		if (v > 0) {
+			const prevPt = points[v - 1];
+			// Distance is invariant to swapping x and y, so we can use the original points
+			allDistance += common.distance(pt, prevPt);
 		}
-		prev = pt;
-	});
+	}
+
+	const m = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+	const b = (sumY / count) - (m * sumX) / count;
+	let totalDist = 0;
+
+	const firstX = vertical ? points[0].y : points[0].x;
+	const lastX = vertical ? points[pointsLength - 1].y : points[pointsLength - 1].x;
+
 	const firstPoint = {
-		x: correctedPoints[0].x,
-		y: correctedPoints[0].x * m + b
+		x: firstX,
+		y: firstX * m + b
 	};
 	const lastpoint = {
-		x: correctedPoints[pointsLength - 1].x,
-		y: correctedPoints[pointsLength - 1].x * m + b
+		x: lastX,
+		y: lastX * m + b
 	};
 	const fixedLength = common.distance(firstPoint,lastpoint);
 	totalDist =  fixedLength / allDistance ;
