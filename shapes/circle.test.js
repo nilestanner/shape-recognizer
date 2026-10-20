@@ -66,4 +66,35 @@ describe('shapes/circle', () => {
     assert.strictEqual(result.radius, 5);
     assert.strictEqual(result.accuracy, 1);
   });
+
+  it('should handle large arrays without maximum call stack size exceeded (DoS fix)', () => {
+    const points = Array(200000).fill({x: 0, y: 0});
+    assert.doesNotThrow(() => {
+      analyzeCircle(points);
+    });
+  });
+
+  it('handles an empty array of points', () => {
+    const result = analyzeCircle([]);
+    assert.ok(Number.isNaN(result.accuracy));
+    assert.ok(Number.isNaN(result.radius));
+    assert.ok(Number.isNaN(result.center.x));
+    assert.ok(Number.isNaN(result.center.y));
+  });
+
+  it('handles a single-point array', () => {
+    const result = analyzeCircle([{ x: 10, y: 10 }]);
+    assert.ok(Number.isNaN(result.accuracy));
+    assert.strictEqual(result.radius, 0);
+    assert.deepStrictEqual(result.center, { x: 10, y: 10 });
+    assert.deepStrictEqual(result.lowWeakPoint, { x: 10, y: 10, d: 0 });
+    assert.deepStrictEqual(result.highWeakPoint, { d: 0 });
+  });
+
+  it('can handle a very large array of points without stack overflow', { todo: 'shapes/circle.js analyzeCircle throws Maximum call stack size exceeded due to Math.max.apply on large arrays' }, () => {
+    const largeArray = Array.from({ length: 200000 }, (_, i) => ({ x: i, y: i }));
+    const result = analyzeCircle(largeArray);
+    assert.ok(result);
+    assert.ok(typeof result.accuracy === 'number');
+  });
 });
