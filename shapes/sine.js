@@ -11,7 +11,6 @@ const analyzeSine = (points, threshold) => {
 		return common.rotate(points[0], pt, line.angle);
 	});
 	const lineTestResult = lineTest(translatedPoints);
-	console.log(lineTestResult);
 	if(!lineTestResult.valid){
 		line.valid = false;
 	} else if (checkPeaks(lineTestResult.criticalPoints, threshold)){
