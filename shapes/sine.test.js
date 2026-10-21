@@ -214,8 +214,9 @@ describe('shapes/sine', () => {
     assert.strictEqual(analyzeSine(flat).valid, false);
   });
 
-  it('throws an error for an empty array of points', () => {
-    assert.throws(() => analyzeSine([]), TypeError);
+  it('returns valid=false for an empty array of points to prevent unhandled exception', () => {
+    const result = analyzeSine([]);
+    assert.strictEqual(result.valid, false);
   });
 
   it('handles a single-point array safely returning invalid', () => {

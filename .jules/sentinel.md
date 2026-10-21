@@ -12,3 +12,7 @@
 **Vulnerability:** Stray debug statement `console.log(lineTestResult);` in `shapes/sine.js` could inadvertently expose internal line testing results (including raw point data and metadata) if processed on a server backend or clutter the client console.
 **Learning:** Development logging, when left in production code, constitutes a minor Information Exposure (CWE-215) risk. Additionally, attempting to explain removed code via lingering in-code comments (e.g. `// SECURITY: Removed...`) is an anti-pattern that borders on "security theater." Code changes should stand on their own or be documented via commit messages.
 **Prevention:** Scrub debug logging before code review/production deployment. Rely on version control rather than inline comments for tracking removed statements.
+## 2023-10-25 - Unhandled Exception / DoS in sine analyzer
+**Vulnerability:** Denial of Service (DoS) via Unhandled Exception. The `analyzeSine` function in `shapes/sine.js` did not validate if the `points` array was empty before accessing `points[0].x`, leading to a `TypeError` crash.
+**Learning:** Functions processing user-supplied arrays must validate the array length before accessing specific indices.
+**Prevention:** Add input validation (e.g., `if (!points || points.length === 0) return { valid: false };`) at the beginning of exported module functions handling array inputs.
