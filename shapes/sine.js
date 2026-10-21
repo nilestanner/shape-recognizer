@@ -2,6 +2,9 @@ const common = require('../common.js');
 const analyzeLine = require('./line.js');
 
 const analyzeSine = (points, threshold) => {
+	if (!points || points.length === 0) {
+		return { valid: false };
+	}
 	if (threshold === undefined) {
 		threshold = 3;
 	}
