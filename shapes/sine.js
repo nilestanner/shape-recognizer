@@ -74,11 +74,12 @@ const lineTest = (points) => {
 		prev = current;
 		return result;
 	});
-	const averageHeight = points.map((point) =>{
-		return point.y;
-	}).reduce((a,b) => {
-		return a + b;
-	},0) / points.length;
+	// ⚡ Bolt Optimization: Replace map().reduce() with single pass for loop
+	let sumY = 0;
+	for (let i = 0; i < points.length; i++) {
+		sumY += points[i].y;
+	}
+	const averageHeight = sumY / points.length;
 
 	highpts = highpts.filter((highPoint) => {
 		return highPoint.y > averageHeight;
