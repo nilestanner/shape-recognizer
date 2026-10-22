@@ -8,6 +8,9 @@ const distance = (point1, point2) => {
 };
 
 const isVertical = (points) => {
+	if (!Array.isArray(points)) {
+		return false;
+	}
 	if (!points.length) {
 		return;
 	}

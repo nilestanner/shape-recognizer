@@ -8,6 +8,12 @@ describe('shapes/line', () => {
     assert.strictEqual(typeof analyzeLine, 'function');
   });
 
+  it('returns valid: false for undefined or null inputs to prevent DoS', () => {
+    assert.deepStrictEqual(analyzeLine(), { valid: false });
+    assert.deepStrictEqual(analyzeLine(null), { valid: false });
+    assert.deepStrictEqual(analyzeLine('not an array'), { valid: false });
+  });
+
   it('should return empty arrays when points array is empty', () => {
     const result = analyzeLine([]);
     assert.deepStrictEqual(result, [[], []]);
