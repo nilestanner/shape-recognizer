@@ -1,3 +1,7 @@
 ## 2024-05-24 - Array Map Redundancy Optimization
 **Learning:** In highly mathematical / statistical loop iterations, calling `.map()` to create temporary parallel arrays before reducing/looping them can add unnecessary O(N) allocation overhead that is easily avoided by directly accessing properties (`array[i].x`) inside a single `for` loop.
 **Action:** Always check if we can calculate statistical variables (like linear regression variables) in a single pass without prior extraction/map layers.
+
+## $(date +%Y-%m-%d) - Math.pow vs Multiplication in Distance Calculation
+**Learning:** In hot path geometry calculations (like computing distances between thousands of points), using `Math.pow(dx, 2)` incurs a significant function call overhead compared to simple multiplication `dx * dx`. Replacing it preserves readability while providing a measurable speed boost across all modules that rely on `common.distance`.
+**Action:** Always prefer direct multiplication for small integer powers (e.g., squaring) in performance-critical sections over `Math.pow`.
