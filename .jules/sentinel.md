@@ -16,3 +16,8 @@
 **Vulnerability:** Denial of Service (DoS) via Unhandled Exception. The `analyzeSine` function in `shapes/sine.js` did not validate if the `points` array was empty before accessing `points[0].x`, leading to a `TypeError` crash.
 **Learning:** Functions processing user-supplied arrays must validate the array length before accessing specific indices.
 **Prevention:** Add input validation (e.g., `if (!points || points.length === 0) return { valid: false };`) at the beginning of exported module functions handling array inputs.
+
+## 2024-10-23 - Missing input validation for non-array inputs (DoS risk)
+**Vulnerability:** Unhandled TypeErrors could occur when shape analysis modules (`shapes/circle.js`, `shapes/line.js`, `shapes/sine.js`) were passed invalid input types such as `null`, `undefined`, or `{}` instead of arrays. This could crash the backend node process, leading to a Denial of Service (DoS).
+**Learning:** Functions that process arrays must use `Array.isArray(points)` to validate input types strictly before accessing array-specific properties (`length`) or entering loops, rather than just using loose truthiness checks (e.g. `!points`). Furthermore, graceful fallbacks must match the expected structural return types to prevent cascading TypeErrors downstream.
+**Prevention:** Implement `Array.isArray` checks at the beginning of all modules exported to handle arrays, and write tests specifically asserting that the module gracefully handles non-array input by returning the functionally accurate default structure without throwing an error.
