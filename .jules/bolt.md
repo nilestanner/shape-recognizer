@@ -5,3 +5,7 @@
 ## $(date +%Y-%m-%d) - Math.pow vs Multiplication in Distance Calculation
 **Learning:** In hot path geometry calculations (like computing distances between thousands of points), using `Math.pow(dx, 2)` incurs a significant function call overhead compared to simple multiplication `dx * dx`. Replacing it preserves readability while providing a measurable speed boost across all modules that rely on `common.distance`.
 **Action:** Always prefer direct multiplication for small integer powers (e.g., squaring) in performance-critical sections over `Math.pow`.
+
+## 2026-10-23 - Array Reducer & ForEach Loop Optimization
+**Learning:** Replacing `.reduce()` and `.forEach()` with standard `for` loops avoids allocating and executing callback functions for every element in an array, offering measurable performance improvements in loop-heavy processing.
+**Action:** Use standard `for` loops in mathematical calculations over arrays to reduce overhead and improve execution speed.

@@ -18,12 +18,22 @@ const analyzeSine = (points, threshold) => {
 		line.valid = false;
 	} else if (checkPeaks(lineTestResult.criticalPoints, threshold)){
 		//find amplitude
-		const avehigh = lineTestResult.highPts.reduce((a,b) =>{
-			return a + b.y;
-		},0) / lineTestResult.highPts.length;
-		const avelow = lineTestResult.lowPts.reduce((a,b) =>{
-			return a + b.y;
-		},0) / lineTestResult.lowPts.length;
+		// ⚡ Bolt Optimization: Replace reduce with standard for loops
+		// Avoids creating and invoking callback functions for each element
+		let sumHigh = 0;
+		const highLen = lineTestResult.highPts.length;
+		for (let i = 0; i < highLen; i++) {
+			sumHigh += lineTestResult.highPts[i].y;
+		}
+		const avehigh = sumHigh / highLen;
+
+		let sumLow = 0;
+		const lowLen = lineTestResult.lowPts.length;
+		for (let i = 0; i < lowLen; i++) {
+			sumLow += lineTestResult.lowPts[i].y;
+		}
+		const avelow = sumLow / lowLen;
+
 		line.amplitude = Math.abs(avehigh - avelow) / 2;
 		//find period
 		line.valid = true;
@@ -107,12 +117,16 @@ const checkPeaks = (points, threshold) => {
 	var peakCount = 0;
 	points.sort((a,b) => {
 		return a.x - b.x;
-	}).forEach((point) => {
+	});
+	// ⚡ Bolt Optimization: Replace forEach with standard for loop
+	// Avoids callback overhead
+	for (let i = 0; i < points.length; i++) {
+		const point = points[i];
 		if(point.type !== prevType && prevType !== null){
 			peakCount++;
 		}
 		prevType = point.type;
-	});
+	}
 	return peakCount >= threshold;
 };
 
