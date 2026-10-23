@@ -1,9 +1,12 @@
-const { describe, it } = require('node:test');
+const { describe, it, beforeEach } = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const analyzer = require('../index.js');
+
+let mockPointTexts = [];
+let mockPaths = [];
 
 class MockPoint {
   constructor(x, y) {
@@ -17,6 +20,7 @@ class MockPointText {
     this.content = opts.content;
     this.point = opts.point;
     this.fillColor = opts.fillColor;
+    mockPointTexts.push(this);
   }
 }
 
@@ -27,6 +31,7 @@ class MockPath {
     this.strokeColor = opts.strokeColor;
     this.selected = opts.selected;
     this.fullySelected = opts.fullySelected;
+    mockPaths.push(this);
   }
   add(pt) {
     this.points.push(pt);
@@ -34,6 +39,8 @@ class MockPath {
 }
 
 function createEnvironment() {
+  mockPointTexts = [];
+  mockPaths = [];
   const listeners = {};
   const elements = {};
 
@@ -62,7 +69,8 @@ function createEnvironment() {
   };
 
   vm.createContext(sandbox);
-  vm.runInContext(code, sandbox);
+  // Add the filename so that c8 coverage tool tracks the executions
+  vm.runInContext(code, sandbox, { filename: path.join(__dirname, 'main.js') });
 
   return { sandbox, listeners, elements };
 }
@@ -83,6 +91,11 @@ global.document = {
 };
 
 describe('demo/main.js', () => {
+  beforeEach(() => {
+    mockPointTexts = [];
+    mockPaths = [];
+  });
+
   it('should initialize module main without errors', () => {
     assert.doesNotThrow(() => {
       require('./main.js');
@@ -140,9 +153,8 @@ describe('demo/main.js', () => {
       sandbox.onMouseDrag({ point: new MockPoint(50, 60) });
       assert.strictEqual(sandbox.allPoints.length, 2);
 
-      assert.doesNotThrow(() => {
-        sandbox.onMouseUp({});
-      });
+      // Verify that calling onMouseUp clears allPoints
+      sandbox.onMouseUp({});
       assert.strictEqual(sandbox.allPoints.length, 0);
     });
 
@@ -154,9 +166,7 @@ describe('demo/main.js', () => {
       sandbox.onMouseDrag({ point: new MockPoint(10, 10) });
       sandbox.onMouseDrag({ point: new MockPoint(20, 20) });
 
-      assert.doesNotThrow(() => {
-        sandbox.onMouseUp({});
-      });
+      sandbox.onMouseUp({});
       assert.strictEqual(sandbox.allPoints.length, 0);
     });
 
@@ -168,33 +178,36 @@ describe('demo/main.js', () => {
       sandbox.onMouseDrag({ point: new MockPoint(5, 5) });
       sandbox.onMouseDrag({ point: new MockPoint(10, 10) });
 
-      assert.doesNotThrow(() => {
-        sandbox.onMouseUp({});
-      });
+      sandbox.onMouseUp({});
       assert.strictEqual(sandbox.allPoints.length, 0);
     });
   });
 
   describe('helper drawing functions', () => {
-    it('should execute createx without errors', () => {
+    it('should execute createx and create paths', () => {
       const { sandbox } = createEnvironment();
-      assert.doesNotThrow(() => {
-        sandbox.createx(new MockPoint(50, 50), 'blue');
-      });
+      const initialPathsCount = mockPaths.length;
+      sandbox.createx(new MockPoint(50, 50), 'blue');
+      assert.strictEqual(mockPaths.length, initialPathsCount + 2);
+      assert.strictEqual(mockPaths[mockPaths.length-1].strokeColor, 'blue');
     });
 
-    it('should execute drawLine without errors', () => {
+    it('should execute drawLine and create a path', () => {
       const { sandbox } = createEnvironment();
-      assert.doesNotThrow(() => {
-        sandbox.drawLine(new MockPoint(0, 0), new MockPoint(100, 100), 'green');
-      });
+      const initialPathsCount = mockPaths.length;
+      sandbox.drawLine(new MockPoint(0, 0), new MockPoint(100, 100), 'green');
+      assert.strictEqual(mockPaths.length, initialPathsCount + 1);
+      assert.strictEqual(mockPaths[mockPaths.length-1].strokeColor, 'green');
+      assert.strictEqual(mockPaths[mockPaths.length-1].points.length, 2);
     });
 
-    it('should execute createPath without errors', () => {
+    it('should execute createPath and add points', () => {
       const { sandbox } = createEnvironment();
-      assert.doesNotThrow(() => {
-        sandbox.createPath([new MockPoint(0, 0), new MockPoint(10, 10), new MockPoint(20, 20)], 'red');
-      });
+      const initialPathsCount = mockPaths.length;
+      sandbox.createPath([new MockPoint(0, 0), new MockPoint(10, 10), new MockPoint(20, 20)], 'red');
+      assert.strictEqual(mockPaths.length, initialPathsCount + 1);
+      assert.strictEqual(mockPaths[mockPaths.length-1].strokeColor, 'red');
+      assert.strictEqual(mockPaths[mockPaths.length-1].points.length, 3);
     });
   });
 
@@ -215,6 +228,52 @@ describe('demo/main.js', () => {
       const rotated = sandbox.rotate(pivot, pt, 0);
       assert.strictEqual(rotated.x, 15);
       assert.strictEqual(rotated.y, 5);
+    });
+  });
+
+  describe('show result functions', () => {
+    it('should show circle results with correct text and paths', () => {
+      const { sandbox } = createEnvironment();
+      const initialTextCount = mockPointTexts.length;
+      sandbox.showCircleResults({
+        accuracy: 0.9,
+        center: { x: 10, y: 10 },
+        radius: 5,
+        highWeakPoint: { x: 15, y: 15 },
+        lowWeakPoint: { x: 5, y: 5 }
+      });
+      // Should create 4 new PointTexts
+      assert.strictEqual(mockPointTexts.length, initialTextCount + 4);
+      assert.strictEqual(mockPointTexts[initialTextCount].content, 'accuracy: 90');
+      assert.strictEqual(mockPointTexts[initialTextCount + 1].content, 'high point');
+      assert.strictEqual(mockPointTexts[initialTextCount + 2].content, 'low point');
+      assert.strictEqual(mockPointTexts[initialTextCount + 3].content, 'Radius 5');
+    });
+
+    it('should show line results with correct text and paths', () => {
+      const { sandbox } = createEnvironment();
+      const initialTextCount = mockPointTexts.length;
+      sandbox.showLineResults({
+        accuracy: 0.9,
+        length: 20,
+        angle: 0.5,
+        firstPoint: { x: 0, y: 0 },
+        lastPoint: { x: 20, y: 20 }
+      });
+      assert.strictEqual(mockPointTexts.length, initialTextCount + 1);
+      assert.strictEqual(mockPointTexts[initialTextCount].content, 'Accuracy: 0.9\nLength: 20\nAngle: 0.5');
+    });
+
+    it('should show sine results with correct text', () => {
+      const { sandbox } = createEnvironment();
+      const initialTextCount = mockPointTexts.length;
+      sandbox.showSineResults({
+        valid: true,
+        firstPoint: { x: 0, y: 0 },
+        lastPoint: { x: 20, y: 20 }
+      });
+      assert.strictEqual(mockPointTexts.length, initialTextCount + 1);
+      assert.strictEqual(mockPointTexts[initialTextCount].content, 'Valid: true');
     });
   });
 });
