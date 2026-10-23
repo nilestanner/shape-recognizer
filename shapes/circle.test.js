@@ -74,6 +74,12 @@ describe('shapes/circle', () => {
     });
   });
 
+  it('returns valid: false for undefined or null inputs to prevent DoS', () => {
+    assert.deepStrictEqual(analyzeCircle(), { valid: false });
+    assert.deepStrictEqual(analyzeCircle(null), { valid: false });
+    assert.deepStrictEqual(analyzeCircle('not an array'), { valid: false });
+  });
+
   it('handles an empty array of points', () => {
     const result = analyzeCircle([]);
     assert.ok(Number.isNaN(result.accuracy));
