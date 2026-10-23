@@ -1,6 +1,9 @@
 const common = require('../common.js');
 
 const analyzeCircle = (points, tolerance) => {
+	if (!Array.isArray(points)) {
+		points = [];
+	}
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}

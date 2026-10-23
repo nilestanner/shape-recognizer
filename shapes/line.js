@@ -1,6 +1,9 @@
 const common = require('../common.js');
 
 const analyzeLine = (points) => {
+	if (!Array.isArray(points)) {
+		return [[], []];
+	}
 	const vertical = common.isVertical(points);
 	let sumX = 0;
 	let sumY = 0;

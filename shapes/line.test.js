@@ -13,6 +13,14 @@ describe('shapes/line', () => {
     assert.deepStrictEqual(result, [[], []]);
   });
 
+  it('handles invalid inputs safely', () => {
+    const result = analyzeLine(null);
+    assert.deepStrictEqual(result, [[], []]);
+
+    const result2 = analyzeLine({});
+    assert.deepStrictEqual(result2, [[], []]);
+  });
+
   it('should handle a single-point array', () => {
     const result = analyzeLine([{ x: 1, y: 1 }]);
     assert.ok(Number.isNaN(result.accuracy));
