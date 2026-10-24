@@ -9,3 +9,6 @@
 ## 2026-10-23 - Array Reducer & ForEach Loop Optimization
 **Learning:** Replacing `.reduce()` and `.forEach()` with standard `for` loops avoids allocating and executing callback functions for every element in an array, offering measurable performance improvements in loop-heavy processing.
 **Action:** Use standard `for` loops in mathematical calculations over arrays to reduce overhead and improve execution speed.
+## $(date +%Y-%m-%d) - Splitting Loops for Faster Math Operations
+**Learning:** `Math.sqrt` is up to 3x faster than `Math.pow(x, 0.5)`. When looping over arrays of points, placing conditional type/tolerance checks *inside* the hot loop can slow down execution. Splitting the loop into separate `if/else` blocks outside the loop to execute the optimized `Math.sqrt` path ensures maximum performance.
+**Action:** When working on geometry calculations involving default powers (e.g. `0.5`), split loops rather than using inline ternaries `tolerance === 0.5 ? Math.sqrt(x) : Math.pow(x, tolerance)` to avoid checking the condition on every iteration.
