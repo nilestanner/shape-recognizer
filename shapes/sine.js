@@ -5,6 +5,15 @@ const analyzeSine = (points, threshold) => {
 	if (!Array.isArray(points) || points.length === 0) {
 		return { valid: false };
 	}
+
+	// SECURITY: Validate that all elements are valid point objects to prevent TypeErrors (DoS).
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
+		if (!pt || typeof pt !== 'object' || typeof pt.x !== 'number' || typeof pt.y !== 'number') {
+			return { valid: false };
+		}
+	}
+
 	if (threshold === undefined) {
 		threshold = 3;
 	}

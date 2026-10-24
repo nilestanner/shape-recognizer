@@ -4,6 +4,15 @@ const analyzeLine = (points) => {
 	if (!Array.isArray(points)) {
 		return [[], []];
 	}
+
+	// SECURITY: Validate that all elements are valid point objects to prevent TypeErrors (DoS).
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
+		if (!pt || typeof pt !== 'object' || typeof pt.x !== 'number' || typeof pt.y !== 'number') {
+			return [[], []];
+		}
+	}
+
 	const vertical = common.isVertical(points);
 	let sumX = 0;
 	let sumY = 0;
