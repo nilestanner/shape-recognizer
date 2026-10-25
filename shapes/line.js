@@ -1,7 +1,10 @@
 const common = require('../common.js');
 
 const analyzeLine = (points) => {
-	if (!Array.isArray(points)) {
+	// SECURITY: Ensure points are valid to prevent TypeErrors (DoS) on malformed inputs like [null]
+	points = common.filterValidPoints(points);
+
+	if (points.length === 0) {
 		return [[], []];
 	}
 	const vertical = common.isVertical(points);

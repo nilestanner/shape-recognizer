@@ -92,6 +92,12 @@ describe('shapes/circle', () => {
     const result2 = analyzeCircle({});
     assert.ok(Number.isNaN(result2.accuracy));
     assert.ok(Number.isNaN(result2.radius));
+
+    const result3 = analyzeCircle([null, {x: 'a'}, undefined]);
+    assert.ok(Number.isNaN(result3.accuracy));
+    assert.ok(Number.isNaN(result3.radius));
+    assert.ok(Number.isNaN(result3.center.x));
+    assert.ok(Number.isNaN(result3.center.y));
   });
 
   it('handles a single-point array', () => {

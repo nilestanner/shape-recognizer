@@ -19,6 +19,9 @@ describe('shapes/line', () => {
 
     const result2 = analyzeLine({});
     assert.deepStrictEqual(result2, [[], []]);
+
+    const result3 = analyzeLine([null, {x: 'a'}, undefined]);
+    assert.deepStrictEqual(result3, [[], []]);
   });
 
   it('should handle a single-point array', () => {

@@ -1,9 +1,9 @@
 const common = require('../common.js');
 
 const analyzeCircle = (points, tolerance) => {
-	if (!Array.isArray(points)) {
-		points = [];
-	}
+	// SECURITY: Ensure points are valid to prevent TypeErrors (DoS) on malformed inputs like [null]
+	points = common.filterValidPoints(points);
+
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}

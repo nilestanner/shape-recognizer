@@ -2,7 +2,10 @@ const common = require('../common.js');
 const analyzeLine = require('./line.js');
 
 const analyzeSine = (points, threshold) => {
-	if (!Array.isArray(points) || points.length === 0) {
+	// SECURITY: Ensure points are valid to prevent TypeErrors (DoS) on malformed inputs like [null]
+	points = common.filterValidPoints(points);
+
+	if (points.length === 0) {
 		return { valid: false };
 	}
 	if (threshold === undefined) {

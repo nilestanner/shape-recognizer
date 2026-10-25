@@ -25,8 +25,21 @@ const rotate = (pivotPoint, point, angle) => {
 	};
 };
 
+const filterValidPoints = (points) => {
+	if (!Array.isArray(points)) return [];
+	let validPoints = [];
+	for (let i = 0; i < points.length; i++) {
+		const pt = points[i];
+		if (pt && typeof pt.x === 'number' && typeof pt.y === 'number') {
+			validPoints.push(pt);
+		}
+	}
+	return validPoints;
+};
+
 module.exports = {
   distance,
   isVertical,
-	rotate
+	rotate,
+	filterValidPoints
 };
