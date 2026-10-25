@@ -10,9 +10,12 @@ const analyzeSine = (points, threshold) => {
 	}
 	let line = analyzeLine(points);
 	delete line.accuracy;
-	const translatedPoints = points.map((pt) => {
-		return common.rotate(points[0], pt, line.angle);
-	});
+	// ⚡ Bolt Optimization: Replace map() with a single pass for loop and preallocated array
+	// Avoids callback overhead and dynamic array reallocation
+	const translatedPoints = new Array(points.length);
+	for (let i = 0; i < points.length; i++) {
+		translatedPoints[i] = common.rotate(points[0], points[i], line.angle);
+	}
 	const lineTestResult = lineTest(translatedPoints);
 	if(!lineTestResult.valid){
 		line.valid = false;
@@ -55,7 +58,11 @@ const lineTest = (points) => {
 	} else if(points[0].x > points[points.length-1].x){
 		travelDirection = 'right';
 	}
-	let valid = points.every((current) => {
+	// ⚡ Bolt Optimization: Replace points.every() with a standard for loop
+	// Avoids callback function overhead on every iteration while preserving early exit
+	let valid = true;
+	for (let i = 0; i < points.length; i++) {
+		const current = points[i];
 		let result;
 		if(travelDirection === 'left') {
 			result = current.x + 1 >= prev.x;
@@ -85,8 +92,11 @@ const lineTest = (points) => {
 			}
 		}
 		prev = current;
-		return result;
-	});
+		if (!result) {
+			valid = false;
+			break;
+		}
+	}
 	// ⚡ Bolt Optimization: Replace map().reduce() with single pass for loop
 	let sumY = 0;
 	for (let i = 0; i < points.length; i++) {
