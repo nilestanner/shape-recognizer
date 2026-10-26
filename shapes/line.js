@@ -4,6 +4,11 @@ const analyzeLine = (points) => {
 	if (!Array.isArray(points)) {
 		return [[], []];
 	}
+	for (let i = 0; i < points.length; i++) {
+		if (!points[i] || typeof points[i].x !== 'number' || typeof points[i].y !== 'number') {
+			return [[], []];
+		}
+	}
 	const vertical = common.isVertical(points);
 	let sumX = 0;
 	let sumY = 0;

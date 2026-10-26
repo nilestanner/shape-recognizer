@@ -225,6 +225,12 @@ describe('shapes/sine', () => {
 
     const result2 = analyzeSine({});
     assert.strictEqual(result2.valid, false);
+
+    const result3 = analyzeSine([null]);
+    assert.strictEqual(result3.valid, false);
+
+    const result4 = analyzeSine([{x: 1}]);
+    assert.strictEqual(result4.valid, false);
   });
 
   it('handles a single-point array safely returning invalid', () => {

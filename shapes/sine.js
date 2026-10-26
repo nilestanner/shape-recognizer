@@ -5,6 +5,11 @@ const analyzeSine = (points, threshold) => {
 	if (!Array.isArray(points) || points.length === 0) {
 		return { valid: false };
 	}
+	for (let i = 0; i < points.length; i++) {
+		if (!points[i] || typeof points[i].x !== 'number' || typeof points[i].y !== 'number') {
+			return { valid: false };
+		}
+	}
 	if (threshold === undefined) {
 		threshold = 3;
 	}

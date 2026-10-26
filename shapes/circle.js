@@ -4,6 +4,12 @@ const analyzeCircle = (points, tolerance) => {
 	if (!Array.isArray(points)) {
 		points = [];
 	}
+	for (let i = 0; i < points.length; i++) {
+		if (!points[i] || typeof points[i].x !== 'number' || typeof points[i].y !== 'number') {
+			points = [];
+			break;
+		}
+	}
 	if (tolerance === undefined) {
 		tolerance = 0.5;
 	}
