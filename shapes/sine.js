@@ -10,9 +10,16 @@ const analyzeSine = (points, threshold) => {
 	}
 	let line = analyzeLine(points);
 	delete line.accuracy;
-	const translatedPoints = points.map((pt) => {
-		return common.rotate(points[0], pt, line.angle);
-	});
+	// ⚡ Bolt Optimization: Replace .map() with a preallocated for loop
+	// Eliminates the overhead of allocating and executing a callback function for every element,
+	// and avoids dynamic array reallocation.
+	const len = points.length;
+	const translatedPoints = new Array(len);
+	const pivot = points[0];
+	const angle = line.angle;
+	for (let i = 0; i < len; i++) {
+		translatedPoints[i] = common.rotate(pivot, points[i], angle);
+	}
 	const lineTestResult = lineTest(translatedPoints);
 	if(!lineTestResult.valid){
 		line.valid = false;

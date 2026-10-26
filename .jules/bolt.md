@@ -12,3 +12,7 @@
 ## $(date +%Y-%m-%d) - Splitting Loops for Faster Math Operations
 **Learning:** `Math.sqrt` is up to 3x faster than `Math.pow(x, 0.5)`. When looping over arrays of points, placing conditional type/tolerance checks *inside* the hot loop can slow down execution. Splitting the loop into separate `if/else` blocks outside the loop to execute the optimized `Math.sqrt` path ensures maximum performance.
 **Action:** When working on geometry calculations involving default powers (e.g. `0.5`), split loops rather than using inline ternaries `tolerance === 0.5 ? Math.sqrt(x) : Math.pow(x, tolerance)` to avoid checking the condition on every iteration.
+
+## 2026-10-26 - Preallocating Array in Map Replacements
+**Learning:** When replacing `.map()` with a manual loop to prevent unnecessary overhead, using a preallocated array (e.g. `new Array(len)`) instead of `.push()` avoids dynamic array resizing and can be faster. However, in small arrays or depending on engine optimizations, standard loops might be fast enough.
+**Action:** When replacing `.map()` that returns a same-length array, always use a pre-allocated array `const res = new Array(len)` and set indices directly.
