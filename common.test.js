@@ -25,6 +25,16 @@ describe('common', () => {
       assert.strictEqual(common.isVertical([]), undefined);
     });
 
+    it('handles invalid inputs safely', () => {
+      assert.strictEqual(common.isVertical(null), undefined);
+      assert.strictEqual(common.isVertical(undefined), undefined);
+      assert.strictEqual(common.isVertical({}), undefined);
+      assert.strictEqual(common.isVertical([null]), undefined);
+      assert.strictEqual(common.isVertical([{ x: 1, y: 1 }, null]), undefined);
+      assert.strictEqual(common.isVertical([undefined, { x: 1, y: 1 }]), undefined);
+      assert.strictEqual(common.isVertical([{ x: 'invalid', y: 1 }, { x: 2, y: 2 }]), undefined);
+    });
+
     it('is true when the y span is larger than the x span', () => {
       assert.strictEqual(common.isVertical([{ x: 0, y: 0 }, { x: 1, y: 10 }]), true);
     });

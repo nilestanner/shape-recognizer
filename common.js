@@ -8,10 +8,15 @@ const distance = (point1, point2) => {
 };
 
 const isVertical = (points) => {
-	if (!points.length) {
+	if (!Array.isArray(points) || !points.length) {
 		return;
 	}
-	return Math.abs(points[0].x - points[points.length - 1].x) <  Math.abs(points[0].y - points[points.length - 1].y);
+	const first = points[0];
+	const last = points[points.length - 1];
+	if (!first || !last || typeof first.x !== 'number' || typeof first.y !== 'number' || typeof last.x !== 'number' || typeof last.y !== 'number') {
+		return;
+	}
+	return Math.abs(first.x - last.x) <  Math.abs(first.y - last.y);
 };
 
 const rotate = (pivotPoint, point, angle) => {

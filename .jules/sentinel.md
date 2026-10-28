@@ -25,3 +25,7 @@
 ## 2026-10-27 - Validate shape point elements
 **Learning:** An array check alone does not prevent property access errors on null, missing, or non-numeric point elements.
 **Action:** Validate each point before analysis and preserve the existing fallback structure for each analyzer.
+
+## 2026-10-27 - Validate direct isVertical inputs
+**Learning:** Callers can use common.isVertical directly, bypassing analyzer validation.
+**Action:** Check the array and its endpoint coordinates before reading them. Preserve the existing undefined result for empty or invalid input.
