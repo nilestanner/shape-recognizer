@@ -94,6 +94,20 @@ describe('shapes/circle', () => {
     assert.ok(Number.isNaN(result2.radius));
   });
 
+  it('handles arrays with invalid point objects safely (DoS fix)', () => {
+    const result = analyzeCircle([null]);
+    assert.ok(Number.isNaN(result.accuracy));
+    assert.ok(Number.isNaN(result.radius));
+
+    const result2 = analyzeCircle([{ x: 10 }]); // missing y
+    assert.ok(Number.isNaN(result2.accuracy));
+    assert.ok(Number.isNaN(result2.radius));
+
+    const result3 = analyzeCircle([{ x: 10, y: '20' }]); // string instead of number
+    assert.ok(Number.isNaN(result3.accuracy));
+    assert.ok(Number.isNaN(result3.radius));
+  });
+
   it('handles a single-point array', () => {
     const result = analyzeCircle([{ x: 10, y: 10 }]);
     assert.ok(Number.isNaN(result.accuracy));
