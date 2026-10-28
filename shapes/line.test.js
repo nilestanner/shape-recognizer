@@ -21,6 +21,17 @@ describe('shapes/line', () => {
     assert.deepStrictEqual(result2, [[], []]);
   });
 
+  it('handles arrays with invalid point objects safely (DoS fix)', () => {
+    const result = analyzeLine([null]);
+    assert.deepStrictEqual(result, [[], []]);
+
+    const result2 = analyzeLine([{ x: 10 }]); // missing y
+    assert.deepStrictEqual(result2, [[], []]);
+
+    const result3 = analyzeLine([{ x: 10, y: '20' }]); // string instead of number
+    assert.deepStrictEqual(result3, [[], []]);
+  });
+
   it('should handle a single-point array', () => {
     const result = analyzeLine([{ x: 1, y: 1 }]);
     assert.ok(Number.isNaN(result.accuracy));

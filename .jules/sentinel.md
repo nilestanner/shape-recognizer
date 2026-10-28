@@ -21,3 +21,7 @@
 **Vulnerability:** Unhandled TypeErrors could occur when shape analysis modules (`shapes/circle.js`, `shapes/line.js`, `shapes/sine.js`) were passed invalid input types such as `null`, `undefined`, or `{}` instead of arrays. This could crash the backend node process, leading to a Denial of Service (DoS).
 **Learning:** Functions that process arrays must use `Array.isArray(points)` to validate input types strictly before accessing array-specific properties (`length`) or entering loops, rather than just using loose truthiness checks (e.g. `!points`). Furthermore, graceful fallbacks must match the expected structural return types to prevent cascading TypeErrors downstream.
 **Prevention:** Implement `Array.isArray` checks at the beginning of all modules exported to handle arrays, and write tests specifically asserting that the module gracefully handles non-array input by returning the functionally accurate default structure without throwing an error.
+
+## 2026-10-27 - Validate shape point elements
+**Learning:** An array check alone does not prevent property access errors on null, missing, or non-numeric point elements.
+**Action:** Validate each point before analysis and preserve the existing fallback structure for each analyzer.
