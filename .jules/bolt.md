@@ -12,3 +12,7 @@
 ## $(date +%Y-%m-%d) - Splitting Loops for Faster Math Operations
 **Learning:** `Math.sqrt` is up to 3x faster than `Math.pow(x, 0.5)`. When looping over arrays of points, placing conditional type/tolerance checks *inside* the hot loop can slow down execution. Splitting the loop into separate `if/else` blocks outside the loop to execute the optimized `Math.sqrt` path ensures maximum performance.
 **Action:** When working on geometry calculations involving default powers (e.g. `0.5`), split loops rather than using inline ternaries `tolerance === 0.5 ? Math.sqrt(x) : Math.pow(x, tolerance)` to avoid checking the condition on every iteration.
+
+## $(date +%Y-%m-%d) - Array map and every loops overhead
+**Learning:** The higher-order array methods `.map()` and `.every()` create execution overhead in loops from allocating and calling callback functions for each element. In a hot-path iteration (like points processing), converting these to standard `for` loops significantly improves execution time without sacrificing code readability. When refactoring `.map()`, creating a pre-allocated array of a specific length using `new Array(points.length)` helps avoid the performance penalty of dynamic array re-allocations.
+**Action:** When identifying loops that perform heavy iterations over objects (e.g. hundreds of thousands of point geometry calculations), prefer standard `for` loops combined with pre-allocated arrays where appropriate instead of higher-order functional callbacks.

@@ -227,6 +227,17 @@ describe('shapes/sine', () => {
     assert.strictEqual(result2.valid, false);
   });
 
+  it('handles arrays with invalid point objects safely (DoS fix)', () => {
+    const result = analyzeSine([null]);
+    assert.strictEqual(result.valid, false);
+
+    const result2 = analyzeSine([{ x: 10 }]); // missing y
+    assert.strictEqual(result2.valid, false);
+
+    const result3 = analyzeSine([{ x: 10, y: '20' }]); // string instead of number
+    assert.strictEqual(result3.valid, false);
+  });
+
   it('handles a single-point array safely returning invalid', () => {
     const result = analyzeSine([{ x: 1, y: 1 }]);
     assert.strictEqual(result.valid, false);
